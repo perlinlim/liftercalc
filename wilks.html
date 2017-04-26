@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        Stop Comparing Yourself
+    </title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <style type="text/css">
+        body { 
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="base-input-panel">
+        Units: 
+        <input type="radio" id="kg" name="units" value="kg" checked /><label for="kg">KG</label>
+        <input type="radio" id="lbs" name="units" value="lbs" /><label for="lbs">LBS</label><br/>
+        <br/>
+        Calculate:<br/>
+        <input type="radio" id="ws" name="first-calc" value="ws" checked /><label for="ws" title="Calculate Wilks score given bodyweight and weight lifted">Wilks Score</label><br/>
+        <input type="radio" id="wl" name="first-calc" value="wl" /><label for="wl" title="Calculate how much weight must be moved given a set bodyweight and Wilks score (How much weight do I need to move in order to achieve a certain Wilks score?)">Weight Lifted</label><br/>
+        <input type="radio" id="bw" name="first-calc" value="bw" /><label for="bw" title="Calculate bodyweight needed given set Wilks score and weight lifted (How much do I need to weigh if I want to move x amount of weight and have the Wilks score be y?)">Body Weight</label><br/>
+    </div>
+    <br/>
+    
+    <div id="first-input-panel">
+        Select Gender: <input type="radio" id="firstMale" value="male" name="firstGender" checked /><label for="firstMale">Male</label>
+        <input type="radio" id="firstFemale" value="female" name="firstGender"/><label for="firstFemale">Female</label><br/>
+        
+        <div id="fbw-div">Your Body Weight: <input type="text" id="firstBodyweight" placeholder="Body Weight"/><br/></div>
+        <div id="fwl-div">Weight Lifted: <input type="text" id="firstWeightLifted" placeholder="Weight Lifted"/><br/></div>
+        <div id="fws-div" style="display:none;">Wilks Score: <input type="text" id="firstWilksScore" placeholder="Wilks Score"/><br/></div>
+    </div>
+    <br/>
+    <div id="output-div" style="display:none;">
+        <span id="output-span"></span>
+    </div>
+    <br/>
+    <button id="calculate">Calculate</button><br/><br/>
+    <button id="compare" title="Feature coming soon!" disabled>Compare</button>
+
+    <div id="second-input-panel" style="display:none">
+        Compare to:<br/>
+        Gender: <input type="radio" id="secondMale" value="male" name="secondGender"/><label for="secondMale">Male</label>
+        <input type="radio" id="secondFemale" value="female" name="secondGender"/><label for="secondFemale">Female</label><br/>
+        
+        Body Weight: <input type="text" id="secondBodyweight" placeholder="Body Weight"/><br/>
+        Weight Lifted: <input type="text" id="secondWeightLifted" placeholder="Weight Lifted"/><br/>
+        Wilks Score: <input type="text" id="secondWilksScore" placeholder="Wilks Score"/><br/>
+    </div>
+
+    <script src="wilks.js"></script>
+</body>
+</html>
