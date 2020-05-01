@@ -1,0 +1,31 @@
+{
+  "name": "wilks",
+  "version": "1.0.0",
+  "description": "strength calculator",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/perlinlim/Wilks.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/perlinlim/Wilks/issues"
+  },
+  "homepage": "https://github.com/perlinlim/Wilks#readme",
+  "devDependencies": {
+    "@types/prettier": "^2.0.0",
+    "@types/react": "^16.9.34",
+    "@types/react-dom": "^16.9.6",
+    "parcel-bundler": "^1.12.4",
+    "parcel-plugin-nuke-dist": "^1.0.1",
+    "prettier": "^2.0.4",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "typescript": "^3.8.3"
+  }
+}
