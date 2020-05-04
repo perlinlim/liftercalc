@@ -18,7 +18,7 @@ interface UserInputState {
   isKG: boolean;
   event: string;
   category: string;
-  message:string;
+  message: string;
 }
 
 interface UserDataProps {
@@ -40,7 +40,7 @@ class UserData extends React.Component<UserDataProps, UserInputState> {
       isFemale: false,
       event: "CL",
       category: "PL",
-        message:"",
+      message: "",
     };
 
     this.handleBodyWeightChange = this.handleBodyWeightChange.bind(this);
@@ -79,17 +79,33 @@ class UserData extends React.Component<UserDataProps, UserInputState> {
   handleSubmit(event: any) {
     event.preventDefault();
     let weightCoeff = 0.45359237;
-    let bw = this.state.isKG ? this.state.bodyWeight : this.state.bodyWeight * weightCoeff;
-    let wl = this.state.isKG? this.state.weightLifted : this.state.weightLifted * weightCoeff;
-    if (bw < 40){
-        let minWeight = this.state.isKG ? 40 : 90;
-        this.setState({message:"Please enter a body weight greater than " + minWeight.toFixed(2) + " for best results."});
-        this.props.onInfoSubmit(0, 0, false, "CLPL");
-    } else if (wl <= 0){
-        this.setState({message:"Please enter a lifted weight greater than 0.00"})
-        this.props.onInfoSubmit(0, 0, false, "CLPL");
-    }else {
-        this.props.onInfoSubmit(bw, wl, this.state.isFemale, this.state.event.concat(this.state.category));
+    let bw = this.state.isKG
+      ? this.state.bodyWeight
+      : this.state.bodyWeight * weightCoeff;
+    let wl = this.state.isKG
+      ? this.state.weightLifted
+      : this.state.weightLifted * weightCoeff;
+    if (bw < 40) {
+      let minWeight = this.state.isKG ? 40 : 90;
+      this.setState({
+        message:
+          "Please enter a body weight greater than " +
+          minWeight.toFixed(2) +
+          " for best results.",
+      });
+      this.props.onInfoSubmit(0, 0, false, "CLPL");
+    } else if (wl <= 0) {
+      this.setState({
+        message: "Please enter a lifted weight greater than 0.00",
+      });
+      this.props.onInfoSubmit(0, 0, false, "CLPL");
+    } else {
+      this.props.onInfoSubmit(
+        bw,
+        wl,
+        this.state.isFemale,
+        this.state.event.concat(this.state.category)
+      );
     }
   }
 
@@ -208,7 +224,7 @@ class UserData extends React.Component<UserDataProps, UserInputState> {
         </label>
         <br />
         {this.state.message}
-        <br/>
+        <br />
         <input type="submit" value="Calculate" />
       </form>
     );
@@ -528,7 +544,14 @@ class App extends React.Component<{}, UserPropsFull> {
     return (
       <div>
         <UserData onInfoSubmit={this.handleInfoUpdate} />
-        <OldWilks
+        <br />
+        <IPF_GL
+          bodyWeight={this.state.bodyWeight}
+          weightLifted={this.state.weightLifted}
+          isFemale={this.state.isFemale}
+          competition={this.state.competition}
+        />
+        <DOTS
           bodyWeight={this.state.bodyWeight}
           weightLifted={this.state.weightLifted}
           isFemale={this.state.isFemale}
@@ -538,18 +561,13 @@ class App extends React.Component<{}, UserPropsFull> {
           weightLifted={this.state.weightLifted}
           isFemale={this.state.isFemale}
         />
-        <DOTS
+        <br />
+        <OldWilks
           bodyWeight={this.state.bodyWeight}
           weightLifted={this.state.weightLifted}
           isFemale={this.state.isFemale}
         />
         <IPF
-          bodyWeight={this.state.bodyWeight}
-          weightLifted={this.state.weightLifted}
-          isFemale={this.state.isFemale}
-          competition={this.state.competition}
-        />
-        <IPF_GL
           bodyWeight={this.state.bodyWeight}
           weightLifted={this.state.weightLifted}
           isFemale={this.state.isFemale}
