@@ -18,6 +18,7 @@ interface UserInputState {
   isKG: boolean;
   event: string;
   category: string;
+  message:string;
 }
 
 interface UserDataProps {
@@ -39,6 +40,7 @@ class UserData extends React.Component<UserDataProps, UserInputState> {
       isFemale: false,
       event: "CL",
       category: "PL",
+        message:"",
     };
 
     this.handleBodyWeightChange = this.handleBodyWeightChange.bind(this);
@@ -77,16 +79,18 @@ class UserData extends React.Component<UserDataProps, UserInputState> {
   handleSubmit(event: any) {
     event.preventDefault();
     let weightCoeff = 0.45359237;
-    this.props.onInfoSubmit(
-      this.state.isKG
-        ? this.state.bodyWeight
-        : this.state.bodyWeight * weightCoeff,
-      this.state.isKG
-        ? this.state.weightLifted
-        : this.state.weightLifted * weightCoeff,
-      this.state.isFemale,
-      this.state.event.concat(this.state.category)
-    );
+    let bw = this.state.isKG ? this.state.bodyWeight : this.state.bodyWeight * weightCoeff;
+    let wl = this.state.isKG? this.state.weightLifted : this.state.weightLifted * weightCoeff;
+    if (bw < 40){
+        let minWeight = this.state.isKG ? 40 : 90;
+        this.setState({message:"Please enter a body weight greater than " + minWeight.toFixed(2) + " for best results."});
+        this.props.onInfoSubmit(0, 0, false, "CLPL");
+    } else if (wl <= 0){
+        this.setState({message:"Please enter a lifted weight greater than 0.00"})
+        this.props.onInfoSubmit(0, 0, false, "CLPL");
+    }else {
+        this.props.onInfoSubmit(bw, wl, this.state.isFemale, this.state.event.concat(this.state.category));
+    }
   }
 
   render() {
@@ -112,6 +116,28 @@ class UserData extends React.Component<UserDataProps, UserInputState> {
             onChange={this.handleUnitChange}
           />
           LB
+        </label>
+        <br />
+        Gender:
+        <label>
+          <input
+            type="radio"
+            name="gender"
+            value="false"
+            checked={!this.state.isFemale}
+            onChange={this.handleGenderChange}
+          />
+          Male
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="gender"
+            value="true"
+            checked={this.state.isFemale}
+            onChange={this.handleGenderChange}
+          />
+          Female
         </label>
         <br />
         Event:
@@ -181,27 +207,8 @@ class UserData extends React.Component<UserDataProps, UserInputState> {
           />
         </label>
         <br />
-        <br />
-        <label>
-          <input
-            type="radio"
-            name="gender"
-            value="false"
-            checked={!this.state.isFemale}
-            onChange={this.handleGenderChange}
-          />
-          Male
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="gender"
-            value="true"
-            checked={this.state.isFemale}
-            onChange={this.handleGenderChange}
-          />
-          Female
-        </label>
+        {this.state.message}
+        <br/>
         <input type="submit" value="Calculate" />
       </form>
     );
