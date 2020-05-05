@@ -85,12 +85,15 @@ class UserData extends React.Component<UserDataProps, UserInputState> {
     let wl = this.state.isKG
       ? this.state.weightLifted
       : this.state.weightLifted * weightCoeff;
-    if (bw < 40) {
+    if (bw < 40 || bw > 500) {
       let minWeight = this.state.isKG ? 40 : 90;
+      let maxWeight = this.state.isKG ? 500 : 1100;
       this.setState({
         message:
-          "Please enter a body weight greater than " +
+          "Please enter a body weight between " +
           minWeight.toFixed(2) +
+          " and " +
+          maxWeight.toFixed(2) +
           " for best results.",
       });
       this.props.onInfoSubmit(0, 0, false, "CLPL");
@@ -112,118 +115,151 @@ class UserData extends React.Component<UserDataProps, UserInputState> {
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
-        Units:
-        <label>
-          <input
-            type="radio"
-            name="unit"
-            value="true"
-            checked={this.state.isKG}
-            onChange={this.handleUnitChange}
-          />
-          KG
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="unit"
-            value="false"
-            checked={!this.state.isKG}
-            onChange={this.handleUnitChange}
-          />
-          LB
-        </label>
+        <div className={"radio-selection"}>
+          <span className={"section-label"}>Gender:</span>
+          <br />
+          <div className={"half-width"}>
+            <label>
+              <input
+                type="radio"
+                name="gender"
+                value="false"
+                checked={!this.state.isFemale}
+                onChange={this.handleGenderChange}
+              />
+              Male
+            </label>
+          </div>
+          <div className={"half-width"}>
+            <label>
+              <input
+                type="radio"
+                name="gender"
+                value="true"
+                checked={this.state.isFemale}
+                onChange={this.handleGenderChange}
+              />
+              Female
+            </label>
+          </div>
+        </div>
         <br />
-        Gender:
-        <label>
-          <input
-            type="radio"
-            name="gender"
-            value="false"
-            checked={!this.state.isFemale}
-            onChange={this.handleGenderChange}
-          />
-          Male
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="gender"
-            value="true"
-            checked={this.state.isFemale}
-            onChange={this.handleGenderChange}
-          />
-          Female
-        </label>
+        <div className={"clear"}></div>
+        <div className={"radio-selection"}>
+          <span className={"section-label"}>Units:</span>
+          <br />
+          <div className={"half-width"}>
+            <label>
+              <input
+                type="radio"
+                name="unit"
+                value="true"
+                checked={this.state.isKG}
+                onChange={this.handleUnitChange}
+              />
+              Kilograms (KG)
+            </label>
+          </div>
+          <div className={"half-width"}>
+            <label>
+              <input
+                type="radio"
+                name="unit"
+                value="false"
+                checked={!this.state.isKG}
+                onChange={this.handleUnitChange}
+              />
+              Pounds (LB)
+            </label>
+          </div>
+        </div>
         <br />
-        Event:
-        <label>
-          <input
-            type="radio"
-            name="event"
-            value="CL"
-            checked={this.state.event === "CL"}
-            onChange={this.handleEventChange}
-          />
-          Classic
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="event"
-            value="EQ"
-            checked={this.state.event === "EQ"}
-            onChange={this.handleEventChange}
-          />
-          Equipped
-        </label>
+        <div className={"clear"}></div>
+        <span className={"section-label"}>Body Weight:</span>
         <br />
-        Category:
-        <label>
-          <input
-            type="radio"
-            name="category"
-            value="PL"
-            checked={this.state.category === "PL"}
-            onChange={this.handleCategoryChange}
-          />
-          Powerlifting
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="category"
-            value="BN"
-            checked={this.state.category === "BN"}
-            onChange={this.handleCategoryChange}
-          />
-          Bench
-        </label>
+        <input
+          id={"bodyWeight"}
+          type="number"
+          value={this.state.bodyWeight == 0 ? "" : this.state.bodyWeight}
+          placeholder={"150"}
+          onChange={this.handleBodyWeightChange}
+          max={this.state.isKG ? 500 : 1100}
+          min={this.state.isKG ? 40 : 90}
+        />
         <br />
+        <span className={"section-label"}>Weight Lifted:</span>
         <br />
-        <label>
-          Body Weight:
-          <input
-            id={"bodyWeight"}
-            type="number"
-            value={this.state.bodyWeight == 0 ? "" : this.state.bodyWeight}
-            placeholder={"150"}
-            onChange={this.handleBodyWeightChange}
-          />
-        </label>
-        <br />
-        <label>
-          Weight Lifted:
-          <input
-            id={"weightLifted"}
-            type="number"
-            value={this.state.weightLifted == 0 ? "" : this.state.weightLifted}
-            placeholder={"300"}
-            onChange={this.handleWeightLiftedChange}
-          />
-        </label>
+        <input
+          id={"weightLifted"}
+          type="number"
+          value={this.state.weightLifted == 0 ? "" : this.state.weightLifted}
+          placeholder={"300"}
+          onChange={this.handleWeightLiftedChange}
+          max={99999}
+          min={0}
+        />
         <br />
         {this.state.message}
+        <br />
+        <div className={"radio-selection"}>
+          <span className={"section-label"}>Event:</span>
+          <br />
+          <div className={"half-width"}>
+            <label>
+              <input
+                type="radio"
+                name="event"
+                value="CL"
+                checked={this.state.event === "CL"}
+                onChange={this.handleEventChange}
+              />
+              Classic/Raw
+            </label>
+          </div>
+          <div className={"half-width"}>
+            <label>
+              <input
+                type="radio"
+                name="event"
+                value="EQ"
+                checked={this.state.event === "EQ"}
+                onChange={this.handleEventChange}
+              />
+              Equipped
+            </label>
+          </div>
+        </div>
+        <br />
+        <div className={"clear"}></div>
+        <div className={"radio-selection"}>
+          <span className={"section-label"}>Category:</span>
+          <br />
+          <div className={"half-width"}>
+            <label>
+              <input
+                type="radio"
+                name="category"
+                value="PL"
+                checked={this.state.category === "PL"}
+                onChange={this.handleCategoryChange}
+              />
+              3-Lift
+            </label>
+          </div>
+          <div className={"half-width"}>
+            <label>
+              <input
+                type="radio"
+                name="category"
+                value="BN"
+                checked={this.state.category === "BN"}
+                onChange={this.handleCategoryChange}
+              />
+              Bench
+            </label>
+          </div>
+        </div>
+        <br />
         <br />
         <input type="submit" value="Calculate" />
       </form>

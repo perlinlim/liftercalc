@@ -2,31 +2,86 @@
 <html>
 <head>
     <title>
-        IPF GL | DOTS | WILKS Calculator
+        LifterCalc - IPF GL | DOTS | WILKS Calculator
     </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tool for powerlifters to calculate IPF GL, DOTS, Wilks-2, IPF, and Wilks Scores">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-135772823-2"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-135772823-2');
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
     <style type="text/css">
-        body { 
+        body {
+            font-family:'Open Sans',sans-serif;
+            line-height: 150%;
+        }
+        #container{
+            margin: 0 auto;
+            max-width: 400px;
+        }
+        #app{
+            margin-bottom: 200px;
+        }
+        .section-label{
+            font-weight: bold;
+            font-size: 18px;
+        }
+        label{
+            font-weight: normal;
+            font-size: 18px;
+        }
+        .half-width{
+            width: 50%;
+            float: left;
+        }
+        .radio-selection{
+            margin-bottom: 10px;
+        }
+        input[type="number"]{
+            background: #EBEBEB;
+            border: none;
+            font-size: 16px;
+        }
+        .clear{
+            clear: both;
+        }
+        h1{
             text-align: center;
+            font-size: 64px;
+            font-weight: normal;
         }
     </style>
 </head>
 
 <body>
+<h1>LifterCalc</h1>
+<div id="container">
     <div id="app"></div>
 
         <br/>
 
         <br/>
     <div id="footer">
-        Created by <a href="https://www.perlinlim.com" target="_blank">Perlin Lim</a>.
+        Created by <a href="https://www.perlinlim.com" target="_blank">Perlin Lim</a>, LifterCalc is a one-stop shop
+        for powerlifters to calculate their powerlifting scores and points. Users can immediately see and compare their
+        scores across not just the currently used systems of IPF GL, DOTS, and Wilks-2, but also older formulas like
+        Wilks and IPF.
+        <br/>
         <a href="https://www.github.com/perlinlim/liftercalc" target="_blank">Github</a>
         <br/>
         Formulas are pulled from
         <a href="https://www.powerlifting.sport/fileadmin/ipf/data/ipf-formula/Models_Evaluation-I-2020.pdf" target="_blank">this pdf</a> by the
-        <a href="https://www.powerlifting.sport" target="_blank">International Powerlifting Federation</a>.
+        <a href="https://www.powerlifting.sport" target="_blank">International Powerlifting Federation</a>
     </div>
+</div>
     <script src="main.tsx"></script>
 </body>
 </html>
