@@ -85,24 +85,21 @@ class UserData extends React.Component<UserDataProps, UserInputState> {
     let wl = this.state.isKG
       ? this.state.weightLifted
       : this.state.weightLifted * weightCoeff;
-    if (bw < 40 || bw > 500) {
-      let minWeight = this.state.isKG ? 40 : 90;
-      let maxWeight = this.state.isKG ? 500 : 1100;
+    if (bw == 0) {
       this.setState({
         message:
-          "Please enter a body weight between " +
-          minWeight.toFixed(2) +
-          " and " +
-          maxWeight.toFixed(2) +
-          " for best results.",
+          "Please enter a body weight.",
       });
       this.props.onInfoSubmit(0, 0, false, "CLPL");
-    } else if (wl <= 0) {
+    } else if (wl == 0) {
       this.setState({
-        message: "Please enter a lifted weight greater than 0.00",
+        message: "Please enter a lifted weight.",
       });
       this.props.onInfoSubmit(0, 0, false, "CLPL");
     } else {
+      this.setState({
+        message: "",
+      });
       this.props.onInfoSubmit(
         bw,
         wl,
@@ -116,7 +113,7 @@ class UserData extends React.Component<UserDataProps, UserInputState> {
     return (
       <form onSubmit={this.handleSubmit}>
         <div className={"radio-selection"}>
-          <span className={"section-label"}>Gender:</span>
+          <span className={"bold-label"}>Gender:</span>
           <br />
           <div className={"half-width"}>
             <label>
@@ -146,7 +143,7 @@ class UserData extends React.Component<UserDataProps, UserInputState> {
         <br />
         <div className={"clear"}></div>
         <div className={"radio-selection"}>
-          <span className={"section-label"}>Units:</span>
+          <span className={"bold-label"}>Units:</span>
           <br />
           <div className={"half-width"}>
             <label>
@@ -175,7 +172,7 @@ class UserData extends React.Component<UserDataProps, UserInputState> {
         </div>
         <br />
         <div className={"clear"}></div>
-        <span className={"section-label"}>Body Weight:</span>
+        <span className={"bold-label"}>Body Weight:</span>
         <br />
         <input
           id={"bodyWeight"}
@@ -186,8 +183,8 @@ class UserData extends React.Component<UserDataProps, UserInputState> {
           max={this.state.isKG ? 500 : 1100}
           min={this.state.isKG ? 40 : 90}
         />
-        <br />
-        <span className={"section-label"}>Weight Lifted:</span>
+        <div className={"clear"}></div>
+        <span className={"bold-label"}>Weight Lifted:</span>
         <br />
         <input
           id={"weightLifted"}
@@ -198,11 +195,10 @@ class UserData extends React.Component<UserDataProps, UserInputState> {
           max={99999}
           min={0}
         />
-        <br />
-        {this.state.message}
-        <br />
+        <div className={"clear error horizontal-line"}>{this.state.message}</div>
+        <span className={"helper-text"}>These values only used in IPF GL and IPF calculations:</span>
         <div className={"radio-selection"}>
-          <span className={"section-label"}>Event:</span>
+          <span className={"bold-label"}>Event:</span>
           <br />
           <div className={"half-width"}>
             <label>
@@ -232,7 +228,7 @@ class UserData extends React.Component<UserDataProps, UserInputState> {
         <br />
         <div className={"clear"}></div>
         <div className={"radio-selection"}>
-          <span className={"section-label"}>Category:</span>
+          <span className={"bold-label"}>Category:</span>
           <br />
           <div className={"half-width"}>
             <label>
@@ -243,7 +239,7 @@ class UserData extends React.Component<UserDataProps, UserInputState> {
                 checked={this.state.category === "PL"}
                 onChange={this.handleCategoryChange}
               />
-              3-Lift
+              Full Meet
             </label>
           </div>
           <div className={"half-width"}>
@@ -255,13 +251,13 @@ class UserData extends React.Component<UserDataProps, UserInputState> {
                 checked={this.state.category === "BN"}
                 onChange={this.handleCategoryChange}
               />
-              Bench
+              Bench Only
             </label>
           </div>
         </div>
         <br />
         <br />
-        <input type="submit" value="Calculate" />
+        <input type="submit" className={"bold-label"} value="Calculate Score" />
       </form>
     );
   }
@@ -306,7 +302,7 @@ class OldWilks extends React.Component<UserProps, {}> {
       this.props.isFemale
     );
     if (score > 0) {
-      return <div>Old Wilks: {score.toFixed(2)}</div>;
+      return <div><span className={"bold-label"}>Old Wilks:</span> {score.toFixed(2)}</div>;
     } else {
       return null;
     }
@@ -352,7 +348,7 @@ class NewWilks extends React.Component<UserProps, {}> {
       this.props.isFemale
     );
     if (score > 0) {
-      return <div>New Wilks: {score.toFixed(2)}</div>;
+      return <div><span className={"bold-label"}>New Wilks:</span> {score.toFixed(2)}</div>;
     } else {
       return null;
     }
@@ -397,7 +393,7 @@ class DOTS extends React.Component<UserProps, {}> {
       this.props.isFemale
     );
     if (score > 0) {
-      return <div>DOTS: {score.toFixed(2)}</div>;
+      return <div><span className={"bold-label"}>DOTS:</span> {score.toFixed(2)}</div>;
     } else {
       return null;
     }
@@ -470,7 +466,7 @@ class IPF extends React.Component<UserPropsFull, {}> {
       this.props.competition
     );
     if (score > 0) {
-      return <div>IPF: {score.toFixed(2)}</div>;
+      return <div><span className={"bold-label"}>IPF:</span> {score.toFixed(2)}</div>;
     } else {
       return null;
     }
@@ -540,7 +536,7 @@ class IPF_GL extends React.Component<UserPropsFull, {}> {
       this.props.competition
     );
     if (score > 0) {
-      return <div>IPF GL: {score.toFixed(2)}</div>;
+      return <div><span className={"bold-label"}>IPF GL:</span> {score.toFixed(2)}</div>;
     } else {
       return null;
     }

@@ -25,12 +25,13 @@
         }
         #container{
             margin: 0 auto;
-            max-width: 400px;
+            max-width: 350px;
         }
         #app{
             margin-bottom: 200px;
         }
-        .section-label{
+        .bold-label{
+            font-family:'Open Sans',sans-serif;
             font-weight: bold;
             font-size: 18px;
         }
@@ -45,18 +46,47 @@
         .radio-selection{
             margin-bottom: 10px;
         }
-        input[type="number"]{
+        input[type=number]{
             background: #EBEBEB;
             border: none;
             font-size: 16px;
+            width: 50%;
+            padding: 5px 10px;
+        }
+        input[type=submit]{
+            background-color: #EBEBEB;
+            border: none;
+            padding: 16px 32px;
+            margin: 4px 2px;
+            cursor: pointer;
         }
         .clear{
             clear: both;
+            padding: 5px 0;
         }
         h1{
             text-align: center;
             font-size: 64px;
             font-weight: normal;
+        }
+        .error{
+            color: darkred;
+        }
+        .footer{
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .horizontal-line{
+            width: 100%;
+            border-style: none none solid none;
+            border-color: #000000;
+            border-width: thin;
+            padding-top: 10px;
+            margin-bottom: 5px;
+        }
+        .helper-text{
+            font-size: 14px;
+            line-height: 150%;
         }
     </style>
 </head>
@@ -65,23 +95,19 @@
 <h1>LifterCalc</h1>
 <div id="container">
     <div id="app"></div>
-
-        <br/>
-
-        <br/>
-    <div id="footer">
+</div>
+    <div class="footer">
         Created by <a href="https://www.perlinlim.com" target="_blank">Perlin Lim</a>, LifterCalc is a one-stop shop
         for powerlifters to calculate their powerlifting scores and points. Users can immediately see and compare their
         scores across not just the currently used systems of IPF GL, DOTS, and Wilks-2, but also older formulas like
         Wilks and IPF.
-        <br/>
+        <div class="clear"></div>
         <a href="https://www.github.com/perlinlim/liftercalc" target="_blank">Github</a>
-        <br/>
+        <div class="clear"></div>
         Formulas are pulled from
         <a href="https://www.powerlifting.sport/fileadmin/ipf/data/ipf-formula/Models_Evaluation-I-2020.pdf" target="_blank">this pdf</a> by the
         <a href="https://www.powerlifting.sport" target="_blank">International Powerlifting Federation</a>
     </div>
-</div>
     <script src="main.tsx"></script>
 </body>
 </html>
