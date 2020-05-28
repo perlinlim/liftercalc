@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-interface Scores {
+interface ScoreSet {
   bodyWeight: number;
   weightLifted: number;
   unit: string;
@@ -12,8 +12,13 @@ interface Scores {
   DOTS: string;
 }
 
-interface ScoreList {
-  list: Scores[];
+interface ScoreSetList {
+  list: ScoreSet[];
+}
+
+interface ResultBoxProps extends ScoreSet {
+  index: number;
+  onDeleteScoreSet: (index: number) => void;
 }
 
 interface UserInputState {
@@ -488,7 +493,7 @@ function GetScores(
   isKG: boolean,
   isFemale: boolean,
   competition: string
-): Scores {
+): ScoreSet {
   let weightCoeff = 0.45359237;
   let bw = isKG ? bodyWeight : bodyWeight * weightCoeff;
   let wl = isKG ? weightLifted : weightLifted * weightCoeff;
@@ -505,59 +510,123 @@ function GetScores(
   };
 }
 
-function DisplayRow(scores: Scores) {
-  return (
-    <div className={"result-box"}>
+class ResultBox extends React.Component<
+  ResultBoxProps,
+  { hideLegacy: boolean }
+> {
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      hideLegacy: this.props.index != 0,
+    };
+
+    this.toggleLegacy = this.toggleLegacy.bind(this);
+  }
+
+  toggleLegacy(event: any) {
+    this.setState(() => {
+      return { hideLegacy: !this.state.hideLegacy };
+    });
+  }
+
+  render() {
+    let section = null;
+    if (this.props.index == 0) {
+      section = <div className={"bold-label padding-5-0"}>Your Score</div>;
+    } else if (this.props.index == 1) {
+      section = <div className={"bold-label padding-5-0"}>Previous Scores</div>;
+    }
+    return (
       <div>
-        <span className={"weight"}>{scores.bodyWeight}</span>&nbsp;{scores.unit}
-        &nbsp;lifting&nbsp;
-        <span className={"weight"}>{scores.weightLifted}</span>&nbsp;
-        {scores.unit}
+        {section}
+        <div className={"result-box"} id={"result-box-" + this.props.index}>
+          <div>
+            <span className={"weight"}>{this.props.bodyWeight}</span>
+            &nbsp;
+            {this.props.unit}
+            &nbsp;lifting&nbsp;
+            <span className={"weight"}>{this.props.weightLifted}</span>
+            &nbsp;
+            {this.props.unit}
+            <div
+              className={"toggle"}
+              onClick={() => this.props.onDeleteScoreSet(this.props.index)}
+            >
+              X
+            </div>
+            <div className={"toggle"} onClick={this.toggleLegacy}>
+              {this.state.hideLegacy ? "v" : "^"}
+            </div>
+          </div>
+          <div className={"clear"}></div>
+          <div className={"score-box"}>
+            <span className={"small-label"}>IPF GL</span>
+            <div className={"clear"}></div>
+            <span className={"score"}>{this.props.IPFGL}</span>
+          </div>
+          <div className={"score-box"}>
+            <span className={"small-label"}>Wilks2</span>
+            <div className={"clear"}></div>
+            <span className={"score"}>{this.props.NewWilks}</span>
+          </div>
+          <div className={"score-box"}>
+            <span className={"small-label"}>DOTS</span>
+            <div className={"clear"}></div>
+            <span className={"score"}>{this.props.DOTS}</span>
+          </div>
+          <div
+            id={"legacy"}
+            className={this.state.hideLegacy ? "hidden" : "full-width"}
+          >
+            <div className={"score-box"}>
+              <span className={"small-label"}>IPF</span>
+              <div className={"clear"}></div>
+              <span className={"score"}>{this.props.IPF}</span>
+            </div>
+            <div className={"score-box"}>
+              <span className={"small-label"}>Old Wilks</span>
+              <div className={"clear"}></div>
+              <span className={"score"}>{this.props.OldWilks}</span>
+            </div>
+          </div>
+        </div>
       </div>
-      <div className={"clear"}></div>
-      <div className={"score-box"}>
-        <span className={"small-label"}>IPF GL</span>
-        <div className={"clear"}></div>
-        <span className={"score"}>{scores.IPFGL}</span>
-      </div>
-      <div className={"score-box"}>
-        <span className={"small-label"}>Wilks2</span>
-        <div className={"clear"}></div>
-        <span className={"score"}>{scores.NewWilks}</span>
-      </div>
-      <div className={"score-box"}>
-        <span className={"small-label"}>DOTS</span>
-        <div className={"clear"}></div>
-        <span className={"score"}>{scores.DOTS}</span>
-      </div>
-      <div className={"score-box"}>
-        <span className={"small-label"}>IPF</span>
-        <div className={"clear"}></div>
-        <span className={"score"}>{scores.IPF}</span>
-      </div>
-      <div className={"score-box"}>
-        <span className={"small-label"}>Old Wilks</span>
-        <div className={"clear"}></div>
-        <span className={"score"}>{scores.OldWilks}</span>
-      </div>
-    </div>
-  );
+    );
+  }
 }
 
-class History extends React.Component<ScoreList, {}> {
+function uuidv4() {
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+    var r = (Math.random() * 16) | 0,
+      v = c == "x" ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
+
+class ResultHistory extends React.Component<
+  { scoreSetList: ScoreSetList; onDeleteScoreSet: (index: number) => void },
+  {}
+> {
   constructor(props: any) {
     super(props);
   }
 
   render() {
-    let hist = this.props.list.map((scores) => {
-      return DisplayRow(scores);
+    let hist = this.props.scoreSetList.list.map((scores, index) => {
+      return (
+        <ResultBox
+          key={uuidv4()}
+          {...(scores as ScoreSet)}
+          index={index}
+          onDeleteScoreSet={this.props.onDeleteScoreSet}
+        />
+      );
     });
     return <div>{hist}</div>;
   }
 }
 
-class App extends React.Component<{}, ScoreList> {
+class App extends React.Component<{}, ScoreSetList> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -565,6 +634,7 @@ class App extends React.Component<{}, ScoreList> {
     };
 
     this.handleInfoUpdate = this.handleInfoUpdate.bind(this);
+    this.handleDeleteScoreSet = this.handleDeleteScoreSet.bind(this);
   }
 
   handleInfoUpdate(
@@ -588,14 +658,25 @@ class App extends React.Component<{}, ScoreList> {
     });
   }
 
+  handleDeleteScoreSet(index: number) {
+    let hist = [...this.state.list];
+    hist.splice(index, 1);
+    this.setState(() => {
+      return {
+        list: hist,
+      };
+    });
+  }
+
   render() {
     return (
       <div>
-        <div>
-          <UserData onInfoSubmit={this.handleInfoUpdate} />
-        </div>
+        <UserData onInfoSubmit={this.handleInfoUpdate} />
         <br />
-        <History list={this.state.list} />
+        <ResultHistory
+          scoreSetList={{ list: this.state.list } as ScoreSetList}
+          onDeleteScoreSet={this.handleDeleteScoreSet}
+        />
       </div>
     );
   }
