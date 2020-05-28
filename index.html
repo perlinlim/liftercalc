@@ -30,10 +30,9 @@
             margin-bottom: 200px;
         }
         .bold-label{
-            font-family:'Open Sans Bold',sans-serif;
             font-weight: bold;
-            font-size: 12px;
-            text-transform: uppercase;
+            font-size: 14px;
+            display: inline-block;
         }
         label{
             font-weight: normal;
@@ -50,11 +49,20 @@
         .radio-selection{
             margin-bottom: 10px;
         }
+        .margintop-4{
+            margin-top: 4px;
+        }
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
         input[type=number]{
             background: #EBEBEB;
             border: none;
             font-size: 16px;
             padding: 5px 10px;
+            -moz-appearance: textfield;
         }
         input[type=submit]{
             background-color: #EBEBEB;
@@ -66,6 +74,10 @@
         }
         input[type=radio]{
             vertical-align: text-top;
+            margin-top: 4px;
+        }
+        input{
+            font-family:'Open Sans',sans-serif;
         }
         .clear{
             clear: both;
@@ -74,10 +86,9 @@
             padding: 5px 0;
         }
         h1{
-            text-align: center;
             font-size: 64px;
             font-weight: normal;
-            margin-bottom: 0;
+            margin: 0;
         }
         .error{
             color: darkred;
@@ -104,7 +115,6 @@
             border-radius: 5px;
             padding: 8px 12px;
             width: 100%;
-            font-weight: 300;
             margin-bottom: 20px;
         }
         .score-box{
@@ -121,15 +131,14 @@
         }
         .info{
             font-size: 16px;
-            font-weight: 300;
             margin-bottom: 20px;
         }
     </style>
 </head>
 
 <body>
-<h1>LifterCalc</h1>
 <div id="container">
+    <h1>LifterCalc</h1>
     <div class="info">Enter information to calculate your IPF-GL, Wilks, and DOTS scores</div>
     <div id="app"></div>
 </div>
