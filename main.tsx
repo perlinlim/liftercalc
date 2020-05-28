@@ -1,14 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-interface UserProps {
-  bodyWeight: number;
-  weightLifted: number;
-  isFemale: boolean;
+interface Scores{
+    bodyWeight: number;
+    weightLifted: number;
+    unit: string;
+  IPFGL: string;
+  IPF: string;
+  OldWilks: string;
+  NewWilks: string;
+  DOTS: string;
 }
 
-interface UserPropsFull extends UserProps {
-  competition: string;
+interface ScoreList {
+  list: Scores[];
 }
 
 interface UserInputState {
@@ -25,6 +30,7 @@ interface UserDataProps {
   onInfoSubmit: (
     bw: number,
     wl: number,
+    isKG: boolean,
     isFemale: boolean,
     competition: string
   ) => void;
@@ -78,31 +84,23 @@ class UserData extends React.Component<UserDataProps, UserInputState> {
 
   handleSubmit(event: any) {
     event.preventDefault();
-    let weightCoeff = 0.45359237;
-    let bw = this.state.isKG
-      ? this.state.bodyWeight
-      : this.state.bodyWeight * weightCoeff;
-    let wl = this.state.isKG
-      ? this.state.weightLifted
-      : this.state.weightLifted * weightCoeff;
-    if (bw == 0) {
+    if (this.state.bodyWeight == 0) {
       this.setState({
         message:
           "Please enter a body weight.",
       });
-      this.props.onInfoSubmit(0, 0, false, "CLPL");
-    } else if (wl == 0) {
+    } else if (this.state.weightLifted == 0) {
       this.setState({
         message: "Please enter a lifted weight.",
       });
-      this.props.onInfoSubmit(0, 0, false, "CLPL");
     } else {
       this.setState({
         message: "",
       });
       this.props.onInfoSubmit(
-        bw,
-        wl,
+        this.state.bodyWeight,
+        this.state.weightLifted,
+        this.state.isKG,
         this.state.isFemale,
         this.state.event.concat(this.state.category)
       );
@@ -116,66 +114,70 @@ class UserData extends React.Component<UserDataProps, UserInputState> {
           <span className={"bold-label"}>Gender:</span>
           <br />
           <div className={"half-width"}>
-            <label>
               <input
+                  id="male"
                 type="radio"
                 name="gender"
                 value="false"
                 checked={!this.state.isFemale}
                 onChange={this.handleGenderChange}
               />
+            <label htmlFor={"male"}>
               Male
             </label>
           </div>
           <div className={"half-width"}>
-            <label>
               <input
+                  id="female"
                 type="radio"
                 name="gender"
                 value="true"
                 checked={this.state.isFemale}
                 onChange={this.handleGenderChange}
               />
+
+            <label htmlFor={"female"}>
               Female
             </label>
           </div>
         </div>
         <br />
-        <div className={"clear"}></div>
+        <div className={"clear padding-5-0"}></div>
         <div className={"radio-selection"}>
           <span className={"bold-label"}>Units:</span>
           <br />
           <div className={"half-width"}>
-            <label>
               <input
+                  id="kg"
                 type="radio"
                 name="unit"
                 value="true"
                 checked={this.state.isKG}
                 onChange={this.handleUnitChange}
               />
+            <label htmlFor={"kg"}>
               Kilograms (KG)
             </label>
           </div>
           <div className={"half-width"}>
-            <label>
               <input
+                  id="lb"
                 type="radio"
                 name="unit"
                 value="false"
                 checked={!this.state.isKG}
                 onChange={this.handleUnitChange}
               />
+            <label htmlFor="lb">
               Pounds (LB)
             </label>
           </div>
         </div>
         <br />
-        <div className={"clear"}></div>
-        <span className={"bold-label"}>Body Weight:</span>
-        <br />
-        <input
-          id={"bodyWeight"}
+        <div className={"clear padding-5-0"}></div>
+        <label className={"half-width"} htmlFor={"bodyWeight"}>Body Weight:</label>
+        <input className={"width-40"}
+          id="bodyWeight"
           type="number"
           value={this.state.bodyWeight == 0 ? "" : this.state.bodyWeight}
           placeholder={"150"}
@@ -183,11 +185,10 @@ class UserData extends React.Component<UserDataProps, UserInputState> {
           max={this.state.isKG ? 500 : 1100}
           min={this.state.isKG ? 40 : 90}
         />
-        <div className={"clear"}></div>
-        <span className={"bold-label"}>Weight Lifted:</span>
-        <br />
-        <input
-          id={"weightLifted"}
+        <div className={"clear padding-5-0"}></div>
+        <label className={"half-width"} htmlFor={"weightLifted"}>Weight Lifted:</label>
+        <input className={"width-40"}
+          id="weightLifted"
           type="number"
           value={this.state.weightLifted == 0 ? "" : this.state.weightLifted}
           placeholder={"300"}
@@ -195,172 +196,138 @@ class UserData extends React.Component<UserDataProps, UserInputState> {
           max={99999}
           min={0}
         />
-        <div className={"clear error horizontal-line"}>{this.state.message}</div>
-        <span className={"helper-text"}>These values only used in IPF GL and IPF calculations:</span>
+        <div className={"clear padding-5-0 error horizontal-line"}>{this.state.message}</div>
+          <div>
+        <span className={"small-label"}>These values only used in IPF GL and IPF calculations:</span>
+        <div className={"clear padding-5-0"}></div>
         <div className={"radio-selection"}>
           <span className={"bold-label"}>Event:</span>
           <br />
           <div className={"half-width"}>
-            <label>
               <input
+                  id="classic"
                 type="radio"
                 name="event"
                 value="CL"
                 checked={this.state.event === "CL"}
                 onChange={this.handleEventChange}
               />
+            <label htmlFor={"classic"}>
               Classic/Raw
             </label>
           </div>
           <div className={"half-width"}>
-            <label>
               <input
+                  id="equipped"
                 type="radio"
                 name="event"
                 value="EQ"
                 checked={this.state.event === "EQ"}
                 onChange={this.handleEventChange}
               />
+            <label htmlFor={"equipped"}>
               Equipped
             </label>
           </div>
         </div>
         <br />
-        <div className={"clear"}></div>
+        <div className={"clear padding-5-0"}></div>
         <div className={"radio-selection"}>
           <span className={"bold-label"}>Category:</span>
           <br />
           <div className={"half-width"}>
-            <label>
               <input
+                  id="full"
                 type="radio"
                 name="category"
                 value="PL"
                 checked={this.state.category === "PL"}
                 onChange={this.handleCategoryChange}
               />
+            <label htmlFor={"full"}>
               Full Meet
             </label>
           </div>
           <div className={"half-width"}>
-            <label>
               <input
+                  id={"bench"}
                 type="radio"
                 name="category"
                 value="BN"
                 checked={this.state.category === "BN"}
                 onChange={this.handleCategoryChange}
               />
+            <label htmlFor={"bench"}>
               Bench Only
             </label>
           </div>
         </div>
+              </div>
         <br />
         <br />
-        <input type="submit" className={"bold-label"} value="Calculate Score" />
+        <input type="submit" className={"bold-label"} value="Calculate Scores" />
       </form>
     );
   }
 }
 
-class OldWilks extends React.Component<UserProps, {}> {
-  constructor(props: UserProps) {
-    super(props);
+function Calculate_OldWilks(bodyWeight: number, weightLifted: number, isFemale: boolean){
+  const maleCoeff = [
+    -216.0475144,
+    16.2606339,
+    -0.002388645,
+    -0.00113732,
+    7.01863e-6,
+    -1.291e-8,
+  ];
+  const femaleCoeff = [
+    594.31747775582,
+    -27.23842536447,
+    0.82112226871,
+    -0.00930733913,
+    4.731582e-5,
+    -9.054e-8,
+  ];
+  let denominator = isFemale ? femaleCoeff[0] : maleCoeff[0];
+  let coeff = isFemale ? femaleCoeff : maleCoeff;
+
+  for (let i = 1; i < coeff.length; i++) {
+    denominator += coeff[i] * Math.pow(bodyWeight, i);
   }
 
-  calculate(bw: number, wl: number, isFemale: boolean) {
-    const maleCoeff = [
-      -216.0475144,
-      16.2606339,
-      -0.002388645,
-      -0.00113732,
-      7.01863e-6,
-      -1.291e-8,
-    ];
-    const femaleCoeff = [
-      594.31747775582,
-      -27.23842536447,
-      0.82112226871,
-      -0.00930733913,
-      4.731582e-5,
-      -9.054e-8,
-    ];
-    let denominator = isFemale ? femaleCoeff[0] : maleCoeff[0];
-    let coeff = isFemale ? femaleCoeff : maleCoeff;
-
-    for (let i = 1; i < coeff.length; i++) {
-      denominator += coeff[i] * Math.pow(bw, i);
-    }
-
-    return (500 / denominator) * wl;
-  }
-
-  render() {
-    let score = this.calculate(
-      this.props.bodyWeight,
-      this.props.weightLifted,
-      this.props.isFemale
-    );
-    if (score > 0) {
-      return <div><span className={"bold-label"}>Old Wilks:</span> {score.toFixed(2)}</div>;
-    } else {
-      return null;
-    }
-  }
+  let score = (500 / denominator) * weightLifted;
+  return score.toFixed(2);
 }
 
-class NewWilks extends React.Component<UserProps, {}> {
-  constructor(props: UserProps) {
-    super(props);
+function Calculate_NewWilks(bodyWeight: number, weightLifted: number, isFemale: boolean){
+  const maleCoeff = [
+    47.4617885411949,
+    8.47206137941125,
+    0.073694103462609,
+    -1.39583381094385e-3,
+    7.07665973070743e-6,
+    -1.20804336482315e-8,
+  ];
+  const femaleCoeff = [
+    -125.425539779509,
+    13.7121941940668,
+    -0.0330725063103405,
+    -1.0504000506583e-3,
+    9.38773881462799e-6,
+    -2.3334613884954e-8,
+  ];
+  let denominator = isFemale ? femaleCoeff[0] : maleCoeff[0];
+  let coeff = isFemale ? femaleCoeff : maleCoeff;
+
+  for (let i = 1; i < coeff.length; i++) {
+    denominator += coeff[i] * Math.pow(bodyWeight, i);
   }
 
-  calculate(bw: number, wl: number, isFemale: boolean) {
-    const maleCoeff = [
-      47.4617885411949,
-      8.47206137941125,
-      0.073694103462609,
-      -1.39583381094385e-3,
-      7.07665973070743e-6,
-      -1.20804336482315e-8,
-    ];
-    const femaleCoeff = [
-      -125.425539779509,
-      13.7121941940668,
-      -0.0330725063103405,
-      -1.0504000506583e-3,
-      9.38773881462799e-6,
-      -2.3334613884954e-8,
-    ];
-    let denominator = isFemale ? femaleCoeff[0] : maleCoeff[0];
-    let coeff = isFemale ? femaleCoeff : maleCoeff;
-
-    for (let i = 1; i < coeff.length; i++) {
-      denominator += coeff[i] * Math.pow(bw, i);
-    }
-
-    return (600 / denominator) * wl;
-  }
-
-  render() {
-    let score = this.calculate(
-      this.props.bodyWeight,
-      this.props.weightLifted,
-      this.props.isFemale
-    );
-    if (score > 0) {
-      return <div><span className={"bold-label"}>New Wilks:</span> {score.toFixed(2)}</div>;
-    } else {
-      return null;
-    }
-  }
+  let score = (600 / denominator) * weightLifted;
+  return score.toFixed(2);
 }
 
-class DOTS extends React.Component<UserProps, {}> {
-  constructor(props: UserProps) {
-    super(props);
-  }
-
-  calculate(bw: number, wl: number, isFemale: boolean) {
+function Calculate_DOTS(bodyWeight: number, weightLifted: number, isFemale: boolean){
     const maleCoeff = [
       -307.75076,
       24.0900756,
@@ -380,32 +347,14 @@ class DOTS extends React.Component<UserProps, {}> {
     let coeff = isFemale ? femaleCoeff : maleCoeff;
 
     for (let i = 1; i < coeff.length; i++) {
-      denominator += coeff[i] * Math.pow(bw, i);
+      denominator += coeff[i] * Math.pow(bodyWeight, i);
     }
 
-    return (500 / denominator) * wl;
-  }
-
-  render() {
-    let score = this.calculate(
-      this.props.bodyWeight,
-      this.props.weightLifted,
-      this.props.isFemale
-    );
-    if (score > 0) {
-      return <div><span className={"bold-label"}>DOTS:</span> {score.toFixed(2)}</div>;
-    } else {
-      return null;
-    }
-  }
+    let score = (500 / denominator) * weightLifted;
+    return score.toFixed(2);
 }
 
-class IPF extends React.Component<UserPropsFull, {}> {
-  constructor(props: UserPropsFull) {
-    super(props);
-  }
-
-  calculate(bw: number, wl: number, isFemale: boolean, competition: string) {
+function Calculate_IPF(bodyWeight: number, weightLifted: number, isFemale: boolean, competition: string){
     const maleCoeffCLPL = [310.67, 857.785, 53.216, 147.0835];
     const maleCoeffCLBN = [86.4745, 259.155, 17.5785, 53.122];
     const maleCoeffEQPL = [387.265, 1121.28, 80.6324, 222.4896];
@@ -450,35 +399,15 @@ class IPF extends React.Component<UserPropsFull, {}> {
           break;
       }
     }
-    let lnbw = Math.log(bw);
+    let lnbw = Math.log(bodyWeight);
     let score =
       500 +
       100 *
-        ((wl - (coeff[0] * lnbw - coeff[1])) / (coeff[2] * lnbw - coeff[3]));
-    return score;
-  }
-
-  render() {
-    let score = this.calculate(
-      this.props.bodyWeight,
-      this.props.weightLifted,
-      this.props.isFemale,
-      this.props.competition
-    );
-    if (score > 0) {
-      return <div><span className={"bold-label"}>IPF:</span> {score.toFixed(2)}</div>;
-    } else {
-      return null;
-    }
-  }
+        ((weightLifted - (coeff[0] * lnbw - coeff[1])) / (coeff[2] * lnbw - coeff[3]));
+    return score.toFixed(2);
 }
 
-class IPF_GL extends React.Component<UserPropsFull, {}> {
-  constructor(props: UserPropsFull) {
-    super(props);
-  }
-
-  calculate(bw: number, wl: number, isFemale: boolean, competition: string) {
+function Calculate_IPFGL(bodyWeight: number, weightLifted: number, isFemale: boolean, competition: string){
     const maleCoeffCLPL = [1199.72839, 1025.18162, 0.00921];
     const maleCoeffCLBN = [320.98041, 281.40258, 0.01008];
     const maleCoeffEQPL = [1236.25115, 1449.21864, 0.01644];
@@ -523,34 +452,84 @@ class IPF_GL extends React.Component<UserPropsFull, {}> {
           break;
       }
     }
-    let power = -coeff[2] * bw;
-    let score = wl * (100 / (coeff[0] - coeff[1] * Math.pow(Math.E, power)));
-    return score;
-  }
+    let power = -coeff[2] * bodyWeight;
+    let score = weightLifted * (100 / (coeff[0] - coeff[1] * Math.pow(Math.E, power)));
+    return score.toFixed(2);
+}
 
-  render() {
-    let score = this.calculate(
-      this.props.bodyWeight,
-      this.props.weightLifted,
-      this.props.isFemale,
-      this.props.competition
+function GetScores(bodyWeight: number, weightLifted: number, isKG: boolean, isFemale: boolean, competition: string): Scores{
+    let weightCoeff = 0.45359237;
+    let bw = isKG
+      ? bodyWeight
+      : bodyWeight * weightCoeff;
+    let wl = isKG
+      ? weightLifted
+      : weightLifted * weightCoeff;
+    let unit = isKG ? "KG" : "LB";
+  return {bodyWeight :  bodyWeight
+      , weightLifted: weightLifted
+      , unit: isKG ? "KG" : "LB"
+    ,  IPFGL : Calculate_IPFGL(bw, wl, isFemale, competition)
+    , NewWilks : Calculate_NewWilks(bw, wl, isFemale)
+    , DOTS : Calculate_DOTS(bw, wl, isFemale)
+    , IPF : Calculate_IPF(bw, wl, isFemale, competition)
+    , OldWilks : Calculate_OldWilks(bw, wl, isFemale)};
+}
+
+function DisplayRow(scores: Scores){
+    return (<div className={"result-box"}>
+            <div>
+                <span className={"weight"}>{scores.bodyWeight}</span>&nbsp;{scores.unit}&nbsp;lifting&nbsp;
+                <span className={"weight"}>{scores.weightLifted}</span>&nbsp;{scores.unit}</div>
+        <div className={"clear"}></div>
+        <div className={"score-box"}>
+            <span className={"small-label"}>IPF GL</span>
+            <div className={"clear"}></div>
+            <span className={"score"}>{scores.IPFGL}</span>
+        </div>
+        <div className={"score-box"}>
+            <span className={"small-label"}>Wilks2</span>
+            <div className={"clear"}></div>
+            <span className={"score"}>{scores.NewWilks}</span>
+        </div>
+        <div className={"score-box"}>
+            <span className={"small-label"}>DOTS</span>
+            <div className={"clear"}></div>
+            <span className={"score"}>{scores.DOTS}</span>
+        </div>
+        <div className={"score-box"}>
+            <span className={"small-label"}>IPF</span>
+            <div className={"clear"}></div>
+            <span className={"score"}>{scores.IPF}</span>
+        </div>
+        <div className={"score-box"}>
+            <span className={"small-label"}>Old Wilks</span>
+            <div className={"clear"}></div>
+            <span className={"score"}>{scores.OldWilks}</span>
+        </div>
+    </div>);
+}
+
+class History extends React.Component<ScoreList, {}>{
+  constructor(props: any) {
+    super(props);
+  };
+
+  render(){
+      let hist = this.props.list.map((scores) => {return DisplayRow(scores)});
+    return(
+        <div>
+            {hist}
+        </div>
     );
-    if (score > 0) {
-      return <div><span className={"bold-label"}>IPF GL:</span> {score.toFixed(2)}</div>;
-    } else {
-      return null;
-    }
   }
 }
 
-class App extends React.Component<{}, UserPropsFull> {
+class App extends React.Component<{}, ScoreList> {
   constructor(props: any) {
     super(props);
     this.state = {
-      bodyWeight: 0,
-      weightLifted: 0,
-      isFemale: false,
-      competition: "CLPL",
+      list: [],
     };
 
     this.handleInfoUpdate = this.handleInfoUpdate.bind(this);
@@ -559,15 +538,14 @@ class App extends React.Component<{}, UserPropsFull> {
   handleInfoUpdate(
     bodyWeight: number,
     weightLifted: number,
+    isKG: boolean,
     isFemale: boolean,
     competition: string
   ) {
+    let newScores = GetScores(bodyWeight, weightLifted, isKG, isFemale, competition);
     this.setState(() => {
       return {
-        bodyWeight,
-        weightLifted,
-        isFemale,
-        competition,
+        list: [newScores].concat(this.state.list),
       };
     });
   }
@@ -577,33 +555,8 @@ class App extends React.Component<{}, UserPropsFull> {
       <div>
         <UserData onInfoSubmit={this.handleInfoUpdate} />
         <br />
-        <IPF_GL
-          bodyWeight={this.state.bodyWeight}
-          weightLifted={this.state.weightLifted}
-          isFemale={this.state.isFemale}
-          competition={this.state.competition}
-        />
-        <DOTS
-          bodyWeight={this.state.bodyWeight}
-          weightLifted={this.state.weightLifted}
-          isFemale={this.state.isFemale}
-        />
-        <NewWilks
-          bodyWeight={this.state.bodyWeight}
-          weightLifted={this.state.weightLifted}
-          isFemale={this.state.isFemale}
-        />
-        <br />
-        <OldWilks
-          bodyWeight={this.state.bodyWeight}
-          weightLifted={this.state.weightLifted}
-          isFemale={this.state.isFemale}
-        />
-        <IPF
-          bodyWeight={this.state.bodyWeight}
-          weightLifted={this.state.weightLifted}
-          isFemale={this.state.isFemale}
-          competition={this.state.competition}
+        <History
+          list={this.state.list}
         />
       </div>
     );

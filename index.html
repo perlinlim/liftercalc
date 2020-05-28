@@ -21,7 +21,6 @@
     <style type="text/css">
         body {
             font-family:'Open Sans',sans-serif;
-            line-height: 150%;
         }
         #container{
             margin: 0 auto;
@@ -31,9 +30,10 @@
             margin-bottom: 200px;
         }
         .bold-label{
-            font-family:'Open Sans',sans-serif;
+            font-family:'Open Sans Bold',sans-serif;
             font-weight: bold;
-            font-size: 18px;
+            font-size: 12px;
+            text-transform: uppercase;
         }
         label{
             font-weight: normal;
@@ -43,6 +43,10 @@
             width: 50%;
             float: left;
         }
+        .width-40{
+            width: 40%;
+            float: right;
+        }
         .radio-selection{
             margin-bottom: 10px;
         }
@@ -50,7 +54,6 @@
             background: #EBEBEB;
             border: none;
             font-size: 16px;
-            width: 50%;
             padding: 5px 10px;
         }
         input[type=submit]{
@@ -59,15 +62,22 @@
             padding: 16px 32px;
             margin: 4px 2px;
             cursor: pointer;
+            border-radius: 15px;
+        }
+        input[type=radio]{
+            vertical-align: text-top;
         }
         .clear{
             clear: both;
+        }
+        .padding-5-0{
             padding: 5px 0;
         }
         h1{
             text-align: center;
             font-size: 64px;
             font-weight: normal;
+            margin-bottom: 0;
         }
         .error{
             color: darkred;
@@ -84,9 +94,35 @@
             padding-top: 10px;
             margin-bottom: 5px;
         }
-        .helper-text{
+        .small-label{
             font-size: 14px;
             line-height: 150%;
+        }
+        .result-box{
+            display: inline-block;
+            border: 1px solid #D3D3D3;
+            border-radius: 5px;
+            padding: 8px 12px;
+            width: 100%;
+            font-weight: 300;
+            margin-bottom: 20px;
+        }
+        .score-box{
+            float: left;
+            width: 30%;
+            margin-top: 10px;
+        }
+        .weight{
+            font-weight: bold;
+        }
+        .score{
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .info{
+            font-size: 16px;
+            font-weight: 300;
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -94,6 +130,7 @@
 <body>
 <h1>LifterCalc</h1>
 <div id="container">
+    <div class="info">Enter information to calculate your IPF-GL, Wilks, and DOTS scores</div>
     <div id="app"></div>
 </div>
     <div class="footer">
