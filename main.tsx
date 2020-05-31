@@ -183,8 +183,6 @@ class UserData extends React.Component<UserDataProps, UserInputState> {
           value={this.state.bodyWeight == 0 ? "" : this.state.bodyWeight}
           placeholder={"150"}
           onChange={this.handleBodyWeightChange}
-          max={this.state.isKG ? 500 : 1100}
-          min={this.state.isKG ? 40 : 90}
           step={0.01}
         />
         <div className={"clear padding-5-0"}></div>
@@ -300,9 +298,12 @@ function Calculate_OldWilks(
   ];
   let denominator = isFemale ? femaleCoeff[0] : maleCoeff[0];
   let coeff = isFemale ? femaleCoeff : maleCoeff;
+  let minbw = isFemale ? 26.51 : 40;
+  let maxbw = isFemale ? 154.53 : 201.9;
+  let bw = Math.min(Math.max(bodyWeight, minbw), maxbw);
 
   for (let i = 1; i < coeff.length; i++) {
-    denominator += coeff[i] * Math.pow(bodyWeight, i);
+    denominator += coeff[i] * Math.pow(bw, i);
   }
 
   let score = (500 / denominator) * weightLifted;
@@ -332,9 +333,12 @@ function Calculate_NewWilks(
   ];
   let denominator = isFemale ? femaleCoeff[0] : maleCoeff[0];
   let coeff = isFemale ? femaleCoeff : maleCoeff;
+  let minbw = 40;
+  let maxbw = isFemale ? 150.95 : 200.95;
+  let bw = Math.min(Math.max(bodyWeight, minbw), maxbw);
 
   for (let i = 1; i < coeff.length; i++) {
-    denominator += coeff[i] * Math.pow(bodyWeight, i);
+    denominator += coeff[i] * Math.pow(bw, i);
   }
 
   let score = (600 / denominator) * weightLifted;
@@ -363,9 +367,11 @@ function Calculate_DOTS(
 
   let denominator = isFemale ? femaleCoeff[0] : maleCoeff[0];
   let coeff = isFemale ? femaleCoeff : maleCoeff;
+  let maxbw = isFemale ? 150 : 210;
+  let bw = Math.min(Math.max(bodyWeight, 40), maxbw);
 
   for (let i = 1; i < coeff.length; i++) {
-    denominator += coeff[i] * Math.pow(bodyWeight, i);
+    denominator += coeff[i] * Math.pow(bw, i);
   }
 
   let score = (500 / denominator) * weightLifted;
@@ -422,6 +428,8 @@ function Calculate_IPF(
         break;
     }
   }
+  if (bodyWeight < 40) return "0.00";
+
   let lnbw = Math.log(bodyWeight);
   let score =
     500 +
@@ -481,6 +489,8 @@ function Calculate_IPFGL(
         break;
     }
   }
+  if (bodyWeight < 35) return "0.00";
+
   let power = -coeff[2] * bodyWeight;
   let score =
     weightLifted * (100 / (coeff[0] - coeff[1] * Math.pow(Math.E, power)));
