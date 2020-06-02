@@ -436,7 +436,7 @@ function Calculate_IPF(
     100 *
       ((weightLifted - (coeff[0] * lnbw - coeff[1])) /
         (coeff[2] * lnbw - coeff[3]));
-  return score.toFixed(2);
+  return score < 0 ? "0.00" : score.toFixed(2);
 }
 
 function Calculate_IPFGL(
@@ -494,7 +494,7 @@ function Calculate_IPFGL(
   let power = -coeff[2] * bodyWeight;
   let score =
     weightLifted * (100 / (coeff[0] - coeff[1] * Math.pow(Math.E, power)));
-  return score.toFixed(2);
+  return score < 0 ? "0.00" : score.toFixed(2);
 }
 
 function GetScores(
