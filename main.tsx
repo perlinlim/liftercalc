@@ -541,9 +541,7 @@ class ResultBox extends React.Component<
 
   render() {
     let section = null;
-    if (this.props.index == 0) {
-      section = <div className={"bold-label padding-5-0"}>Your Score</div>;
-    } else if (this.props.index == 1) {
+    if (this.props.index == 1) {
       section = <div className={"bold-label padding-5-0"}>Previous Scores</div>;
     }
     return (
@@ -632,7 +630,7 @@ class ResultHistory extends React.Component<
         />
       );
     });
-    return <div>{hist}</div>;
+    return <div className={"history-panel"}><div className={"bold-label padding-5-0"}>Your Score</div>{hist}</div>;
   }
 }
 
@@ -680,7 +678,7 @@ class App extends React.Component<{}, ScoreSetList> {
 
   render() {
     return (
-      <div>
+      <div className={"flex-container"}>
         <UserData onInfoSubmit={this.handleInfoUpdate} />
         <br />
         <ResultHistory

@@ -30,10 +30,18 @@
     <style type="text/css">
         body {
             font-family:'Open Sans',sans-serif;
+            /*background-color: #333333;
+            color: #eeeeee;*/
+        }
+        a{
+            color: inherit;
         }
         #container{
             margin: 0 auto;
-            max-width: 350px;
+            max-width: 750px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
         }
         #app{
             margin-bottom: 200px;
@@ -71,6 +79,7 @@
             border: none;
             font-size: 16px;
             padding: 5px 10px;
+            border-radius: 5px;
             -moz-appearance: textfield;
         }
         input[type=submit]{
@@ -101,7 +110,7 @@
             cursor: default;
         }
         .error{
-            color: darkred;
+            color: #ff0033;
         }
         .footer{
             max-width: 600px;
@@ -157,15 +166,30 @@
         .hidden{
             display: none;
         }
+        .flex-container{
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .history-panel{
+            width: 326px;
+            padding: 10px 20px;
+            background-color: #eeeeee;
+            border-radius: 5px;
+        }
+        form{
+            width: 350px;
+            margin: 0 20px 20px 0;
+        }
     </style>
 </head>
 
 <body>
-<div id="container">
-    <h1>LifterCalc</h1>
-    <div class="info">Enter information to calculate your IPF-GL, Wilks, and DOTS scores</div>
-    <div id="app"></div>
-</div>
+    <div id="container">
+        <h1>LifterCalc</h1>
+        <div class="info">Enter information to calculate your IPF-GL, Wilks, and DOTS scores</div>
+        <div id="app"></div>
+    </div>
     <div class="footer">
         Find source code and file issues on <a href="https://www.github.com/perlinlim/liftercalc" target="_blank">Github</a>
         <div class="clear padding-5-0"></div>
